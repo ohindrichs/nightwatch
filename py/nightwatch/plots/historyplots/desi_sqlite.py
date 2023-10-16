@@ -17,6 +17,9 @@ programs = {
 'CALIB DESI-CALIB-02 LEDs only':13,
 'CALIB DESI-CALIB-03 LEDs only':14,
 'LED03 flat for CTE check':15,
+'ZEROs to stabilize CCDs':16,
+'CALIB long Arcs all':17,
+'tile 80011, donut memory leak test':18,
 }
 
 obstypes = {
@@ -25,6 +28,7 @@ obstypes = {
 'SCIENCE':3,
 'FLAT':4,
 'ARC':5,
+'OTHER':6,
 }
 
 

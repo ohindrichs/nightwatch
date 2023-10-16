@@ -1,3 +1,4 @@
+#!/bin/env python3
 from astropy.io import fits
 from ROOT import TH1D
 import os, sys
@@ -68,6 +69,17 @@ def read_data_perspectro(perspectro):
 	return ','.join(data)
 
 
+def find_fits_files(data_dir):
+	data_files = []
+	for f in os.listdir(data_dir):
+		fullname = os.path.join(data_dir, f)
+		if os.path.isdir(fullname):
+			data_files += find_fits_files(fullname)
+		elif f.endswith(".fits") and f.startswith('qa-'):
+			data_files.append(fullname)
+
+	return data_files
+
 #db_name = "desi_v1.db"
 #data_dir = "/home/otto/DESI/20230816/"
 
@@ -79,8 +91,13 @@ db_name = sys.argv[1]
 data_dir = sys.argv[2]
 
 
-fits_files = [f for f in os.listdir(data_dir) if f.endswith(".fits")]
+#fits_files = [f for f in os.listdir(data_dir) if f.endswith(".fits")]
 
+fits_files = find_fits_files(data_dir)
+
+print(fits_files)
+
+#exit(0)
 
 new_db = os.path.isfile(db_name) == False
 

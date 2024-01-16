@@ -135,16 +135,16 @@ for fits_file in fits_files:
 			data['percamera_sig'] = read_data_percamera_sig(percam)
 
 
-	try:
-		percamfiber_index = fitsdata.index_of('PER_CAMFIBER')
-	except:
-		percamfiber_index = None
-
-	if percamfiber_index != None:
-		percamfiber = fitsdata[percamfiber_index]	
-		data['percamfiber'] = read_data_percamfiber(percamfiber)
-		if percamfiber.header['TFIELDS'] == 11:
-			data['percamfiber_science'] = read_data_percamfiber_science(percamfiber)
+#	try:
+#		percamfiber_index = fitsdata.index_of('PER_CAMFIBER')
+#	except:
+#		percamfiber_index = None
+#
+#	if percamfiber_index != None:
+#		percamfiber = fitsdata[percamfiber_index]	
+#		data['percamfiber'] = read_data_percamfiber(percamfiber)
+#		if percamfiber.header['TFIELDS'] == 11:
+#			data['percamfiber_science'] = read_data_percamfiber_science(percamfiber)
 
 
 	try:

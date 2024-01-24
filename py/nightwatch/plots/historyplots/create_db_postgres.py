@@ -1,45 +1,16 @@
 import psycopg2
+import common_postgres as copo
 
-programs = [
-'CALIB ZEROs for nightly bias',
-'CALIB Dark 5min',
-'ZEROs for dark sequence C',
-'DARK 1200.0s for dark sequence C',
-'BRIGHT',
-'DARK',
-'ZEROs for morning darks',
-'Morning darks',
-'CALIB short Arcs all',
-'CALIB long Arcs Cd+Xe',
-'CALIB DESI-CALIB-00 LEDs only',
-'CALIB DESI-CALIB-01 LEDs only',
-'CALIB DESI-CALIB-02 LEDs only',
-'CALIB DESI-CALIB-03 LEDs only',
-'LED03 flat for CTE check',
-'ZEROs to stabilize CCDs',
-'CALIB long Arcs all',
-#'tile 80011, donut memory leak test',
-]
-
-obstypes = [
-'DARK',
-'ZERO',
-'SCIENCE',
-'FLAT',
-'ARC',
-#'OTHER'
-]
 
 table_commands = {
-
 
 'header':"""
 CREATE TABLE nw_header(
 expid INT NOT NULL,
 night INT NOT NULL,
-obstype en_program NOT NULL,
-program en_obstype NOT NULL,
-time INT NOT NULL,
+obstype VARCHAR(20) NOT NULL,
+program VARCHAR(100) NOT NULL,
+time TIMESTAMP NOT NULL,
 PRIMARY KEY (expid)
 );
 CREATE INDEX expid_index ON nw_header (expid);
@@ -177,24 +148,21 @@ PRIMARY KEY (expid, spectro)
 enum_command = """
 CREATE TYPE en_obstype AS ENUM ({0});
 CREATE TYPE en_program AS ENUM ({1});
-""".format(', '.join(['\''+n+'\'' for n in obstypes]), ', '.join(['\''+n+'\'' for n in programs]))
+""".format(', '.join(['\''+n+'\'' for n in copo.obstypes]), ', '.join(['\''+n+'\'' for n in copo.programs]))
 
-def get_db_connection():
-	db_con = psycopg2.connect( host="localhost", database="dbtest1", user="otto", password="pw-9119")
-	return db_con
 
 
 def create_tables(db_con):
 	db_cur = db_con.cursor()
-	print(enum_command)
-	db_cur.execute(enum_command)
+	#print(enum_command)
+	#db_cur.execute(enum_command)
 	for table_command in table_commands.values():
 		print(table_command)
 		db_cur.execute(table_command)
 	db_cur.close()
 	db_con.commit()
 
-db_con = get_db_connection()
+db_con = copo.get_db_connection()
 
 create_tables(db_con)
 
